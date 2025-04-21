@@ -30,38 +30,50 @@ log_message(){
 
 # --- Argument Parsing ---
 
-SOURCE_DIR="${1:-}"
-DEST_DIR="${2:-}"
+USER_SOURCE_DIR="${1:-}"
+USER_DEST_DIR="${2:-}"
 
-if [ -z "$SOURCE_DIR" ]; then
+if [ -z "${USER_SOURCE_DIR}" ]; then
 	echo "Error: Source log directory not specified."
 	usage
 fi
 
-if [ ! -d "$SOURCE_DIR" ]; then
-	echo "Error: Source directory '$SOURCE_DIR' does not exist or is not a directory."
+TEMP_SOURCE_DIR="${USER_SOURCE_DIR}"
+
+if [ ! -d "${TEMP_SOURCE_DIR}" ]; then
+	echo "Error: Source directory '${TEMP_SOURCE_DIR}' does not exist or is not a directory."
 	exit 1
 fi
 
-if [ -z "$DEST_DIR" ]; then
+SOURCE_DIR=$(realpath "${TEMP_SOURCE_DIR}")
+
+if [ $? ne 0 ] || [ -z ${SOURCE_DIR} ]; then
+	echo "Error: cannot resolve to absolute path for souce directory '${USER_SOURCE_DIR}'"
+	exit 1
+	
+if [ -z "${USER_DEST_DIR}" ]; then
 	echo "Error: Destination archive directory not specified"
 	usage
 fi
 
+TEMP_DEST_DIR="${USER_DEST_DIR}"
+
 # ---Main Logic ----
 
-mkdir -p "$DEST_DIR" # allow existing directory to be DEST_DIR but not existing file
+mkdir -p "${TEMP_DEST_DIR}" # allow existing and new directory to be destination but not existing file
 
 if [ $? -ne 0 ]; then
-	echo "Error: Can not create destination directory '$DEST_DIR', please check the permission and available disk space"
+	echo "Error: Can not create destination directory '${TEMP_DEST_DIR}', please check the permission and available disk space"
 	exit 1
 fi
+
+DEST_DIR=$(realpath "${TEMP_DEST_DIR}")
 
 SCRIPT_LOG_FILE="${DEST_DIR}/${DEFAULT_LOG_FILENAME}"
 
 if [ -z "$(ls -A "${SOURCE_DIR}")" ]; then
-	log_message "Source directory '${SOURCE_DIR}' is empty, nothing to archive" "$SCRIPT_LOG_FILE"
-	log_message "--- Log Archiving Finished (No Action) ---" "$SCRIPT_LOG_FILE"
+	log_message "Source directory '${SOURCE_DIR}' is empty, nothing to archive" "${SCRIPT_LOG_FILE}"
+	log_message "--- Log Archiving Finished (No Action) ---" "${SCRIPT_LOG_FILE}"
 	exit 0
 fi
 
@@ -78,5 +90,5 @@ if tar -czvf "${ARCHIVE_FULL_PATH}" -C "${SOURCE_DIR}" . ; then
 	log_message "Successfully created a compressed archive: ${ARCHIVE_FULL_PATH}" "${SCRIPT_LOG_FILE}"
 else
 	log_message "Error: Failed to create a compressed archive '${ARCHIVE_FULL_PATH}', check the permission or available disk space" "${SCRIPT_LOG_FILE}"
-
+	exit 1
 fi
