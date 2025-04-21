@@ -47,10 +47,11 @@ fi
 
 SOURCE_DIR=$(realpath "${TEMP_SOURCE_DIR}")
 
-if [ $? ne 0 ] || [ -z ${SOURCE_DIR} ]; then
+if [ $? -ne 0 ] || [ -z ${SOURCE_DIR} ]; then
 	echo "Error: cannot resolve to absolute path for souce directory '${USER_SOURCE_DIR}'"
 	exit 1
-	
+fi
+
 if [ -z "${USER_DEST_DIR}" ]; then
 	echo "Error: Destination archive directory not specified"
 	usage
