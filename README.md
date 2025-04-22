@@ -39,7 +39,7 @@ This script automates the process of archiving log files. It takes a source dire
 
 2.  **Make the script executable:**
     ```bash
-    chmod +x archive_logs.sh # Use your script's actual filename
+    chmod +x archive_log.sh # Use your script's actual filename
     ```
 
 ## Usage (Manual Execution)
