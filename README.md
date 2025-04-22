@@ -35,7 +35,7 @@ This script automates the process of archiving log files. It takes a source dire
     git clone https://github.com/wusshit/Log-Archive-Tool.git
     cd Downloads/Log-Archive-Tool
     ```
-    Or simply download the script file (e.g., `archive_logs.sh`).
+    Or simply download the script file (e.g., `archive_log.sh`).
 
 2.  **Make the script executable:**
     ```bash
