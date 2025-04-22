@@ -1,4 +1,4 @@
-# Simple Bash Log Archiver
+# Log Archive Tool
 
 A robust Bash script to compress log files from a specified directory into a timestamped `.tar.gz` archive and store it in a destination directory. Includes action logging and error handling.
 
@@ -32,8 +32,8 @@ This script automates the process of archiving log files. It takes a source dire
 
 1.  **Clone the repository (or download the script):**
     ```bash
-    git clone <https://github.com/wusshit/Log-Archive-Tool.git>
-    cd <repository_directory>
+    git clone https://github.com/wusshit/Log-Archive-Tool.git
+    cd Downloads/Log-Archive-Tool
     ```
     Or simply download the script file (e.g., `archive_logs.sh`).
 
