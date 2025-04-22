@@ -9,8 +9,7 @@ This script automates the process of archiving log files. It takes a source dire
 ## Features
 
 *   **Log Compression:** Uses `tar` and `gzip` to create compressed archives (`.tar.gz`).
-*   **Timestamped Archives:** Generates archives with filenames like `SourceBaseName_archive_YYYY-MM-DD_HH:MM:EpochSeconds.tar.gz` for easy tracking. (Note: The timestamp format uses epoch seconds `%s` as per the script - you might prefer `%S` for standard seconds).
-*   **Command-Line Arguments:** Requires source and destination directories, making it flexible.
+*   **Timestamped Archives:** Generates archives with filenames like `SourceBaseName_archive_YYYY-MM-DD_HH:MM:EpochSeconds.tar.gz` for easy tracking.
 *   **Robust Path Handling:** Uses `realpath` to resolve absolute paths, preventing issues with relative paths, especially when scheduled.
 *   **Error Handling:**
     *   Uses `set -e`, `set -u`, `set -o pipefail` for script robustness.
