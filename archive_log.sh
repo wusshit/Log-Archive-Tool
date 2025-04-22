@@ -78,7 +78,7 @@ if [ -z "$(ls -A "${SOURCE_DIR}")" ]; then
 	exit 0
 fi
 
-TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%s')
+TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
 SOURCE_BASENAME=$(basename "${SOURCE_DIR}")
 ARCHIVE_FILENAME="${SOURCE_BASENAME}_archive_${TIMESTAMP}.tar.gz"
 ARCHIVE_FULL_PATH="${DEST_DIR}/${ARCHIVE_FILENAME}"
