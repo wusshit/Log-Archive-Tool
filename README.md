@@ -44,9 +44,8 @@ This script automates the process of archiving log files. It takes a source dire
 2.  **Make the script executable:**
     ```bash
     # Use your script's actual filename
-    chmod +x archive_log.sh 
-    chmod +x setup_crontab.sh
-    chmod +x set_anacron.sh
+    chmod +x archive_log.sh
+    ...
     chmod +x systemd_timer.sh
     ```
 
