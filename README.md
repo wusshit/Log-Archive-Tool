@@ -4,8 +4,8 @@ A robust Bash script to compress log files from a specified directory into a tim
 
 # Automated scheduling
 
-This tool can be scheduled automatically using `crontab`, `anacron` and `systemd timer units` , guidance scripts here `setup_crontab.sh`, `set_anacron.sh` and `systemd_timer.sh`
-
+This tool can be scheduled automatically using `crontab`, `anacron` and `systemd timer units` , there are guidance scripts: `setup_crontab.sh`, `set_anacron.sh` and `systemd_timer.sh`
+systemd option is recommended here
 ## Overview
 
 This script automates the process of archiving log files. It takes a source directory containing logs and a destination directory as input. It then creates a compressed archive (`.tar.gz`) of the source directory's contents within the destination directory. The archive filename includes a timestamp and the source directory's base name for easy identification. The script also logs its own actions to a file (`archive_run.log` by default) within the destination directory.
@@ -43,7 +43,11 @@ This script automates the process of archiving log files. It takes a source dire
 
 2.  **Make the script executable:**
     ```bash
-    chmod +x archive_log.sh # Use your script's actual filename
+    # Use your script's actual filename
+    chmod +x archive_log.sh 
+    chmod +x setup_crontab.sh
+    chmod +x set_anacron.sh
+    chmod +x systemd_timer.sh
     ```
 
 ## Usage (Manual Execution)
