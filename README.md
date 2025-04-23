@@ -2,10 +2,10 @@
 
 A robust Bash script to compress log files from a specified directory into a timestamped `.tar.gz` archive and store it in a destination directory. Includes action logging and error handling.
 
-# Automated scheduling
+## Automated scheduling
 
 This tool can be scheduled automatically using `crontab`, `anacron` and `systemd timer units` , there are guidance scripts: `setup_crontab.sh`, `set_anacron.sh` and `systemd_timer.sh`
-systemd option is recommended here
+*   Recommendation: systemd 
 ## Overview
 
 This script automates the process of archiving log files. It takes a source directory containing logs and a destination directory as input. It then creates a compressed archive (`.tar.gz`) of the source directory's contents within the destination directory. The archive filename includes a timestamp and the source directory's base name for easy identification. The script also logs its own actions to a file (`archive_run.log` by default) within the destination directory.
