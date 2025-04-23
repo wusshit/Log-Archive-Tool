@@ -58,3 +58,5 @@ Run the script from your terminal, providing the source log directory and the de
 
 ```bash
 /full/path/to/archive_logs.sh <source_log_directory> <destination_archive_directory>
+...
+/full/path/to/systemd_timer.sh <source_log_directory> <destination_archive_directory>
