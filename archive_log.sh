@@ -13,7 +13,7 @@ set -o pipefail
 
 DEFAULT_LOG_FILENAME="archive_run.log" # set the name for this script's action record file
 EMAIL_RECIPIENT="your_email@example.com" # <--- SET YOUR EMAIL ADDRESS HERE
-EMAIL_SUBJECT="Log Archive Script Report $(date +'%Y-%m-$d %H:%M:%S')"
+EMAIL_SUBJECT="Log Archive Script Report $(date +'%Y-%m:%d %H:%M:%S')"
 
 
 # --- functions for instructions and action log---
@@ -67,7 +67,8 @@ TEMP_DEST_DIR="${USER_DEST_DIR}"
 mkdir -p "${TEMP_DEST_DIR}" # allow existing and new directory to be destination but not existing file
 
 if [ $? -ne 0 ]; then
-	echo "Error: Can not create destination directory '${TEMP_DEST_DIR}', please check the permission and available disk space"
+	echo "Error: Can not create destination directory '${TEMP_DEST_DIR}', please check the permission and available disk spacei..."
+	echo
 	exit 1
 fi
 
@@ -99,7 +100,7 @@ fi
 
 if [ -n "$EMAIL_RECIPIENT" ]; then
     log_message "Attempting to email log file to ${EMAIL_RECIPIENT}" "${SCRIPT_LOG_FILE}"
- n  # Create a temporary file ONLY if we are actually going to send mail
+    # Create a temporary file ONLY if we are actually going to send mail
     MAIL_ERROR_TMP_FILE=$(mktemp)
     # Attempt to send mail and redirect stderr
     mail -s "${EMAIL_SUBJECT}" "${EMAIL_RECIPIENT}" < "${SCRIPT_LOG_FILE}" 2> "${MAIL_ERROR_TMP_FILE}"
