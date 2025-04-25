@@ -12,6 +12,9 @@ set -o pipefail
 # -- Configuration ---
 
 DEFAULT_LOG_FILENAME="archive_run.log" # set the name for this script's action record file
+EMAIL_RECIPIENT="your_email@example.com" # <--- SET YOUR EMAIL ADDRESS HERE
+EMAIL_SUBJECT="Log Archive Script Report $(date +'%Y-%m-$d %H:%M:%S')"
+
 
 # --- functions for instructions and action log---
 usage(){
@@ -92,4 +95,31 @@ if tar -czvf "${ARCHIVE_FULL_PATH}" -C "${SOURCE_DIR}" . ; then
 else
 	log_message "Error: Failed to create a compressed archive '${ARCHIVE_FULL_PATH}', check the permission or available disk space" "${SCRIPT_LOG_FILE}"
 	exit 1
+fi
+
+if [ -n "$EMAIL_RECIPIENT" ]; then
+    log_message "Attempting to email log file to ${EMAIL_RECIPIENT}" "${SCRIPT_LOG_FILE}"
+ n  # Create a temporary file ONLY if we are actually going to send mail
+    MAIL_ERROR_TMP_FILE=$(mktemp)
+    # Attempt to send mail and redirect stderr
+    mail -s "${EMAIL_SUBJECT}" "${EMAIL_RECIPIENT}" < "${SCRIPT_LOG_FILE}" 2> "${MAIL_ERROR_TMP_FILE}"
+    mail_exit_status=$? 
+
+    # Check the status AND log the result right here
+    if [ $mail_exit_status -ne 0 ]; then
+        # Failure - read the actual error message from the temp file
+        mail_error_message=$(cat "$MAIL_ERROR_TMP_FILE")
+        # Include the specific error in the log
+        log_message "Warning: Failed to send email to ${EMAIL_RECIPIENT} (Exit Status: $mail_exit_status). Mail Error: ${mail_error_message}" "${SCRIPT_LOG_FILE}"
+    else
+        # Success
+        log_message "Successfully sent email to ${EMAIL_RECIPIENT}." "${SCRIPT_LOG_FILE}"
+    fi
+
+    # Clean up the temporary file used for this attempt
+    rm -f "$MAIL_ERROR_TMP_FILE"
+
+else
+    # Log that email was skipped because no recipient was provided
+    log_message "Skipping email notification: EMAIL_RECIPIENT variable is not set." "${SCRIPT_LOG_FILE}"
 fi
