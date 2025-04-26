@@ -1,6 +1,6 @@
 # Log Archive Tool
 
-A Bash script to automate log file compression into timestamped `.tar.gz` archives, featuring error handling, detailed action logging, optional email notifications of run status, and authored companion scripts for scheduling guidance.
+A Bash script to automate log file compression into timestamped `.tar.gz` archives, featuring error handling, detailed action logging, optional synchronized external email notifications of run status, and authored companion scripts for scheduling guidance.
 
 ## Overview
 
