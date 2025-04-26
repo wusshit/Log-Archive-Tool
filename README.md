@@ -43,7 +43,7 @@ This script archives the contents of a specified source directory into a timesta
 3.  **(If using email) Configure `EMAIL_RECIPIENT`:** Edit the `archive_log.sh` script and set the `EMAIL_RECIPIENT` variable to your desired address.
 4.  **(If using postfix as MTA) Configure `main.cf`:** Add/Modify relayhost, SASL, TLS and (Optional) Sender Rewriting
 
-## Usage (Manual Execution)
+## Usage
 
 Provide the source log directory and the destination archive directory as arguments. Use the full path to the script, especially if running non-interactively.
 
