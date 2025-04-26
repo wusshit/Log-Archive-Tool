@@ -1,61 +1,53 @@
 # Log Archive Tool
 
-A robust Bash script to compress log files from a specified directory into a timestamped `.tar.gz` archive and store it in a destination directory. Includes action logging and error handling.
+A Bash script to automate log file compression into timestamped `.tar.gz` archives, featuring error handling, detailed action logging, optional email notifications of run status, and authored companion scripts for scheduling guidance.
 
-## Automated scheduling
-
-This tool can be scheduled automatically using `crontab`, `anacron` and `systemd timer units` , there are guidance scripts: `setup_crontab.sh`, `set_anacron.sh` and `systemd_timer.sh`
-*   Recommendation: systemd 
 ## Overview
 
-This script automates the process of archiving log files. It takes a source directory containing logs and a destination directory as input. It then creates a compressed archive (`.tar.gz`) of the source directory's contents within the destination directory. The archive filename includes a timestamp and the source directory's base name for easy identification. The script also logs its own actions to a file (`archive_run.log` by default) within the destination directory.
+This script archives the contents of a specified source directory into a timestamped `.tar.gz` file within a destination directory. It meticulously logs its actions to a file (`archive_run.log` by default) within the destination and can optionally email this log upon completion for remote monitoring.
 
 ## Features
 
-*   **Log Compression:** Uses `tar` and `gzip` to create compressed archives (`.tar.gz`).
-*   **Timestamped Archives:** Generates archives with filenames like `SourceBaseName_archive_YYYY-MM-DD_HH:MM:SS.tar.gz` for easy tracking.
-*   **Robust Path Handling:** Uses `realpath` to resolve absolute paths, preventing issues with relative paths, especially when scheduled.
-*   **Error Handling:**
-    *   Uses `set -e`, `set -u`, `set -o pipefail` for script robustness.
-    *   Checks for missing arguments.
-    *   Validates if the source directory exists.
-    *   Handles errors during destination directory creation (`mkdir -p`).
-    *   Checks for permissions or disk space issues during archive creation.
-    *   Exits gracefully with a message if the source directory is empty.
-*   **Action Logging:** Logs key steps (start, source/destination, archive creation attempt, success/failure) with timestamps to a log file (`archive_run.log` by default) in the destination directory using the `log_message` function.
-*   **Correct Archiving:** Uses `tar -C /path/to/source .` to archive only the contents of the source directory without including parent directory paths in the archive structure.
-*   **Idempotent Destination Creation:** Safely creates the destination directory using `mkdir -p`, which doesn't error if the directory already exists.
+*   **Compression:** Creates standard `.tar.gz` archives.
+*   **Timestamping:** Archives are named `SourceBaseName_archive_YYYY-MM-DD_HH-MM-SS.tar.gz` for easy identification.
+*   **Robust Paths:** Uses `realpath` for consistent absolute path handling.
+*   **Detailed Logging:** Records actions (start, paths, attempts, success/failure) with timestamps to both a log file and standard output.
+*   **Comprehensive Error Handling:** Includes checks for arguments, path validity, permissions, empty source directories, and command failures (`set -e -u -o pipefail`).
+*   **Email Notifications:** Optionally sends the execution log via email if a recipient address is configured in the script. Captures and includes email sending errors in the main log.
+*   **Scheduling Support:** Includes helper scripts providing examples for automation via `cron`, `anacron`, and `systemd` timers.
 
 ## Prerequisites
 
 *   **Bash:** The script interpreter.
-*   **GNU Coreutils:** Standard utilities like `tar`, `gzip` (implicitly used by `tar -z`), `date`, `mkdir`, `realpath`, `tee`, `ls`, `basename`. These are typically available on most Linux distributions and macOS.
-*    **(Optional) Schedulers:** `cron`, `anacron`, or `systemd` installed and running if you plan to automate the archiving.
+*   **GNU Coreutils:** `tar`, `gzip` (via `tar -z`), `date`, `mkdir`, `realpath`, `tee`, `ls`, `basename`. (Standard on most Linux/macOS).
+*   **(Optional) Email:** A configured Mail Transfer Agent (MTA) like `postfix` installed and correctly set up to send external email **if using the email notification feature**.
+*   **(Optional) Scheduling:** `cron`, `anacron`, or `systemd` available **if automating the script**.
 
 ## Setup
 
-1.  **Clone the repository (or download the script):**
+1.  **Clone or Download:**
     ```bash
     git clone https://github.com/wusshit/Log-Archive-Tool.git
-    cd Downloads/Log-Archive-Tool
+    cd Log-Archive-Tool
     ```
-    Or simply download the script file (e.g., `archive_log.sh`).
+    Or download the script files directly.
 
-2.  **Make the script executable:**
+2.  **Make Scripts Executable:**
     ```bash
-    # Use your script's actual filename
+    # Check actual filename if different
     chmod +x archive_log.sh
-    ...
-    chmod +x systemd_timer.sh
+    chmod +x setup_crontab.sh
+    chmod +x setup_anacron.sh 
+    chmod +x systemd_timer.sh 
     ```
+3.  **(If using email) Configure `EMAIL_RECIPIENT`:** Edit the `archive_log.sh` script and set the `EMAIL_RECIPIENT` variable to your desired address.
+4.  **(If using postfix as MTA) Configure `main.cf`:** Add/Modify relayhost, SASL, TLS and (Optional) Sender Rewriting
 
 ## Usage (Manual Execution)
 
-Run the script from your terminal, providing the source log directory and the destination archive directory as arguments.
+Provide the source log directory and the destination archive directory as arguments. Use the full path to the script, especially if running non-interactively.
 
 **Syntax:**
 
 ```bash
-/full/path/to/archive_logs.sh <source_log_directory> <destination_archive_directory>
-...
-/full/path/to/systemd_timer.sh <source_log_directory> <destination_archive_directory>
+/full/path/to/archive_log.sh <source_log_directory> <destination_archive_directory>
